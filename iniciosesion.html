@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión — LCC Matrícula</title>
+  <meta name="description" content="Ingresa con tu DNI para acceder al portal estudiantil de matrícula LCC.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-deep: #0d4a1e;
+      --green-mid: #1a6e35;
+      --green-soft: #2a9050;
+      --green-tint: #e6f7ec;
+      --green-pale: #f0faf3;
+      --cream: #fafaf8;
+      --ink: #111810;
+      --muted: #5a6e5c;
+      --border: #c8ddc9;
+      --shadow: rgba(13, 74, 30, 0.12);
+      --gold: #c9a84c;
+      --error-red: #d32f2f;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #e8f2ea;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      background-image:
+        radial-gradient(ellipse 70% 60% at 10% 90%, rgba(42, 144, 80, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 10%, rgba(13, 74, 30, 0.10) 0%, transparent 55%);
+    }
+
+    .card {
+      display: flex;
+      width: 100%;
+      max-width: 900px;
+      background: var(--cream);
+      border-radius: 28px;
+      box-shadow: 0 4px 6px var(--shadow), 0 20px 60px var(--shadow), 0 0 0 1px var(--border);
+      overflow: hidden;
+      animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel {
+      flex: 1;
+      background: linear-gradient(155deg, var(--green-deep) 0%, #1b5c30 50%, var(--green-mid) 100%);
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61, 184, 106, 0.15) 0%, transparent 70%);
+      top: -100px;
+      left: -80px;
+    }
+
+    .panel::after {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42, 144, 80, 0.18) 0%, transparent 70%);
+      bottom: -70px;
+      right: -60px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--green-soft), #3db86a);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 16px rgba(42, 144, 80, 0.4);
+    }
+
+    .brand-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: white;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-body h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 38px;
+      line-height: 1.12;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .panel-body h1 em {
+      font-style: italic;
+      color: #a5d6a7;
+    }
+
+    .panel-body p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.60);
+      line-height: 1.7;
+      max-width: 260px;
+    }
+
+    .steps-list {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.4;
+    }
+
+    .form-wrap {
+      flex: 1.1;
+      padding: 56px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      margin-bottom: 36px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--green-mid);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .form-header {
+      margin-bottom: 36px;
+    }
+
+    .form-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .form-header p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 14px 16px 14px 46px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.22s, box-shadow 0.22s;
+    }
+
+    .input-wrap input::placeholder {
+      color: #b8c8b9;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--green-soft);
+      box-shadow: 0 0 0 3px rgba(42, 144, 80, 0.10);
+    }
+
+    .error-container {
+      background-color: #fde8e8;
+      border: 1px solid var(--error-red);
+      color: var(--error-red);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: all 0.22s ease;
+      margin-top: 8px;
+      box-shadow: 0 6px 20px rgba(13, 74, 30, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--green-mid), var(--green-soft));
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(13, 74, 30, 0.34);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      color: var(--green-deep);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--green-soft);
+      color: var(--green-mid);
+      background: var(--green-tint);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .footer-note a {
+      color: var(--green-soft);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer-note a:hover {
+      color: var(--green-deep);
+    }
+
+    @media (max-width: 680px) {
+      .panel {
+        display: none;
+      }
+
+      .form-wrap {
+        padding: 40px 32px;
+      }
+
+      .card {
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <div class="panel">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <span class="brand-name">LCC Matrículas</span>
+      </div>
+      <div class="panel-body">
+        <h1>Bienvenido<br>a tu <em>portal</em><br>estudiantil</h1>
+        <p>Accede y gestiona todo tu proceso de matrícula de forma rápida y segura.</p>
+      </div>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">Ingresa con tu DNI y contraseña</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Selecciona tu tipo de ingreso</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">Sube tus documentos y confirma</div>
+        </div>
+      </div>
+    </div>
+
+    <form class="form-wrap" id="form-login-lcc">
+      <a href="index.html" class="back-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Volver al inicio
+      </a>
+
+      <div class="form-header">
+        <h2>Iniciar sesión</h2>
+        <p>Ingresa tus credenciales para continuar</p>
+      </div>
+
+      <div class="error-container" id="error-box" role="alert" aria-live="assertive"></div>
+
+      <div class="field">
+        <label for="login-dni">DNI</label>
+        <div class="input-wrap">
+          <span class="icon">🪪</span>
+          <input type="text" placeholder="12345678" maxlength="8" pattern="[0-9]{8}" inputmode="numeric" id="login-dni"
+            required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="login-pass">Contraseña</label>
+        <div class="input-wrap">
+          <span class="icon">🔐</span>
+          <input type="password" placeholder="Mínimo 8 caracteres" id="login-pass" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-login">
+        Ingresar al portal
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </button>
+
+      <div class="divider">o</div>
+
+      <a href="crear-cuenta.html" class="btn-secondary">✨ Crear cuenta nueva</a>
+
+      <p class="footer-note" style="margin-top:28px;">
+        ¿Eres administrador? <a href="matricula-lcc-login.html">Acceso admin →</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('form-login-lcc').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const dniInput = document.getElementById('login-dni').value.trim();
+      const passInput = document.getElementById('login-pass').value.trim();
+      const errorBox = document.getElementById('error-box');
+
+      errorBox.style.display = 'none';
+      errorBox.textContent = '';
+
+      if (dniInput.length !== 8 || isNaN(dniInput)) {
+        errorBox.textContent = 'El DNI debe contener exactamente 8 caracteres numéricos.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      if (passInput.length < 8) {
+        errorBox.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      localStorage.setItem('auth_token', 'session_active_lcc_2026');
+      localStorage.setItem('user_dni', dniInput);
+
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+
+</html>

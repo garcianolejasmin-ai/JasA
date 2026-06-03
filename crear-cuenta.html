@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta — LCC Matrícula</title>
+    <meta name="description" content="Regístrate como nuevo estudiante para iniciar tu proceso de admisión LCC 2026.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --green-deep: #0d4a1e;
+            --green-mid: #1a6e35;
+            --green-soft: #2a9050;
+            --green-tint: #e6f7ec;
+            --green-pale: #f0faf3;
+            --cream: #fafaf8;
+            --ink: #111810;
+            --muted: #5a6e5c;
+            --border: #c8ddc9;
+            --shadow: rgba(13, 74, 30, 0.12);
+            --gold: #c9a84c;
+            --error-red: #d32f2f;
+            --success-green: #155724;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #e8f2ea;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background-image:
+                radial-gradient(ellipse 70% 60% at 10% 90%, rgba(42, 144, 80, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 90% 10%, rgba(13, 74, 30, 0.10) 0%, transparent 55%);
+        }
+
+        .card {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            /* Ligeramente más ancho para acomodar más campos cómodamente */
+            background: var(--cream);
+            border-radius: 28px;
+            box-shadow: 0 4px 6px var(--shadow), 0 20px 60px var(--shadow), 0 0 0 1px var(--border);
+            overflow: hidden;
+            animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel {
+            flex: 1;
+            background: linear-gradient(155deg, var(--green-deep) 0%, #1b5c30 50%, var(--green-mid) 100%);
+            padding: 56px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(61, 184, 106, 0.15) 0%, transparent 70%);
+            top: -100px;
+            left: -80px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--green-soft), #3db86a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 16px rgba(42, 144, 80, 0.4);
+        }
+
+        .brand-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        .panel-body {
+            position: relative;
+            z-index: 1;
+            margin: 40px 0;
+        }
+
+        .panel-body h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 36px;
+            line-height: 1.15;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .panel-body h1 em {
+            font-style: italic;
+            color: #a5d6a7;
+        }
+
+        .panel-body p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.60);
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .requirements-box {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .requirements-box h3 {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .requirements-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .req-item {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, 0.75);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-wrap {
+            flex: 1.2;
+            padding: 48px 52px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--green-mid);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .form-header {
+            margin-bottom: 28px;
+        }
+
+        .form-header h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .form-header p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .field-full {
+                grid-column: span 2;
+            }
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 12px 16px 12px 46px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            background: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.22s, box-shadow 0.22s;
+        }
+
+        .input-wrap input:focus {
+            border-color: var(--green-soft);
+            box-shadow: 0 0 0 3px rgba(42, 144, 80, 0.10);
+        }
+
+        .error-container {
+            background-color: #fde8e8;
+            border: 1px solid var(--error-red);
+            color: var(--error-red);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: all 0.22s ease;
+            box-shadow: 0 6px 20px rgba(13, 74, 30, 0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--green-mid), var(--green-soft));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(13, 74, 30, 0.34);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .footer-note a {
+            color: var(--green-soft);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .footer-note a:hover {
+            color: var(--green-deep);
+        }
+
+        @media (max-width: 768px) {
+            .panel {
+                display: none;
+            }
+
+            .form-wrap {
+                padding: 40px 24px;
+            }
+
+            .card {
+                border-radius: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="panel">
+            <div class="brand">
+                <div class="brand-icon">🎓</div>
+                <span class="brand-name">LCC Matrículas</span>
+            </div>
+            <div class="panel-body">
+                <h1>Crea tu<br>cuenta <em>estudiantil</em></h1>
+                <p>Regístrate en el sistema centralizado de admisión para comenzar tu postulación institucional.</p>
+            </div>
+            <div class="requirements-box">
+                <h3>Requisitos del sistema:</h3>
+                <ul class="requirements-list">
+                    <li class="req-item">🔹 DNI vigente emitido legalmente.</li>
+                    <li class="req-item">🔹 Dirección de correo electrónico activa.</li>
+                    <li class="req-item">🔹 Contraseña robusta de seguridad.</li>
+                </ul>
+            </div>
+        </div>
+
+        <form class="form-wrap" id="form-register-lcc">
+            <a href="iniciosesion.html" class="back-link">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                Volver al login
+            </a>
+
+            <div class="form-header">
+                <h2>Registro de Postulante</h2>
+                <p>Completa tus datos personales de manera exacta</p>
+            </div>
+
+            <div class="error-container" id="error-box" role="alert" aria-live="assertive"></div>
+
+            <div class="form-grid">
+                <div class="field field-full">
+                    <label parent-for="reg-name">Nombre Completo</label>
+                    <div class="input-wrap">
+                        <span class="icon">👤</span>
+                        <input type="text" placeholder="Nombres y Apellidos completos" id="reg-name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label parent-for="reg-dni">DNI</label>
+                    <div class="input-wrap">
+                        <span class="icon">🪪</span>
+                        <input type="text" placeholder="12345678" maxlength="8" pattern="[0-9]{8}" inputmode="numeric"
+                            id="reg-dni" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label parent-for="reg-email">Correo Electrónico</label>
+                    <div class="input-wrap">
+                        <span class="icon">✉️</span>
+                        <input type="email" placeholder="ejemplo@correo.com" id="reg-email" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label parent-for="reg-pass">Contraseña</label>
+                    <div class="input-wrap">
+                        <span class="icon">🔐</span>
+                        <input type="password" placeholder="Mínimo 8 caracteres" id="reg-pass" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label parent-for="reg-pass-confirm">Confirmar Contraseña</label>
+                    <div class="input-wrap">
+                        <span class="icon">🛡️</span>
+                        <input type="password" placeholder="Repite tu contraseña" id="reg-pass-confirm" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="btn-register">
+                Registrar cuenta e ingresar
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+            </button>
+
+            <p class="footer-note">
+                ¿Ya tienes una cuenta creada? <a href="iniciosesion.html">Inicia sesión aquí →</a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('form-register-lcc').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('reg-name').value.trim();
+            const dniInput = document.getElementById('reg-dni').value.trim();
+            const emailInput = document.getElementById('reg-email').value.trim();
+            const passInput = document.getElementById('reg-pass').value.trim();
+            const passConfirmInput = document.getElementById('reg-pass-confirm').value.trim();
+            const errorBox = document.getElementById('error-box');
+
+            // Reset de alertas
+            errorBox.style.display = 'none';
+            errorBox.textContent = '';
+
+            // Validaciones perimetrales básicas de UX
+            if (nameInput.length < 5) {
+                showValidationError('Por favor, ingresa tu nombre y apellido completos.');
+                return;
+            }
+
+            if (dniInput.length !== 8 || isNaN(dniInput)) {
+                showValidationError('El DNI debe contener exactamente 8 caracteres numéricos.');
+                return;
+            }
+
+            if (passInput.length < 8) {
+                showValidationError('La contraseña debe tener una longitud mínima de 8 caracteres.');
+                return;
+            }
+
+            if (passInput !== passConfirmInput) {
+                showValidationError('Las contraseñas ingresadas no coinciden.');
+                return;
+            }
+
+            // Simulación de persistencia y sesión local para consistencia con iniciosesion.html
+            localStorage.setItem('auth_token', 'session_active_lcc_2026');
+            localStorage.setItem('user_dni', dniInput);
+            localStorage.setItem('user_name', nameInput);
+
+            // Redirección directa al Dashboard del estudiante
+            window.location.href = 'dashboard.html';
+        });
+
+        function showValidationError(message) {
+            const errorBox = document.getElementById('error-box');
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

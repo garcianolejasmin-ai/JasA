@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subir Documentos - Matrícula</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --green: #00a63e;
+      --green-dark: #007a2e;
+      --green-light: #e8f9ee;
+      --green-mid: #34c96a;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5ebe7;
+      --bg: #f2f5f3;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 16px;
+      color: var(--text);
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── LEFT PANEL ── */
+    .panel {
+      background: var(--white);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, .07);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #007a2e 0%, #00a63e 60%, #22d46a 100%);
+      padding: 32px 36px 96px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .07);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: 40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .05);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, .85);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 32px;
+      letter-spacing: .02em;
+      transition: color .2s;
+    }
+
+    .back-btn:hover {
+      color: #fff;
+    }
+
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, .18);
+      border: 1px solid rgba(255, 255, 255, .3);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: .02em;
+    }
+
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: 46px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, .88);
+      font-size: 17px;
+    }
+
+    .content {
+      margin-top: -68px;
+      background: var(--white);
+      border-radius: 28px 28px 0 0;
+      padding: 36px 36px 32px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .section-top h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .progress-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green-dark);
+    }
+
+    .progress-bar {
+      width: 100px;
+      height: 7px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      /* Inicializado en 0% */
+      background: linear-gradient(90deg, var(--green-dark), var(--green-mid));
+      border-radius: 999px;
+      transition: width .3s ease;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 28px;
+    }
+
+    /* Document Cards */
+    .doc-card {
+      border: 2px solid var(--border);
+      /* Inicializado neutro */
+      background: var(--white);
+      border-radius: 20px;
+      padding: 22px 22px 22px 20px;
+      margin-bottom: 16px;
+      transition: border-color .25s, box-shadow .25s, background .25s;
+      animation: fadeUp .35s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .doc-card:hover {
+      border-color: #c6dece;
+      box-shadow: 0 4px 18px rgba(0, 166, 62, .05);
+    }
+
+    .card-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .doc-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #edf9f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: background .2s, color .2s;
+    }
+
+    .doc-body {
+      flex: 1;
+    }
+
+    .doc-body h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .doc-body .desc {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .status-chip.required {
+      background: #fef9c3;
+      color: #a16207;
+    }
+
+    .status-chip.ready {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .upload-btn-label {
+      border: 1.5px solid #c6dece;
+      background: var(--white);
+      color: #1a4d2c;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .upload-btn-label:hover {
+      background: #f3fbf6;
+    }
+
+    .upload-btn-label input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-preview {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      animation: fadeUp 0.2s ease;
+    }
+
+    .file-preview-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #166534;
+    }
+
+    .remove-btn {
+      border: none;
+      background: #fee2e2;
+      color: #dc2626;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+
+    .remove-btn:hover {
+      background: #fca5a5;
+    }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      border: none;
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      color: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      font-family: 'Sora', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: opacity .2s, transform .15s, box-shadow .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(0, 120, 40, .22);
+      letter-spacing: .01em;
+    }
+
+    .submit-btn:hover {
+      opacity: .92;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0, 120, 40, .3);
+    }
+
+    .submit-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      color: #9ca3af;
+      text-align: center;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ── RIGHT SIDEBAR ── */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .checklist-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .06);
+    }
+
+    .checklist-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .check-item:last-child {
+      border-bottom: none;
+    }
+
+    .check-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #111827;
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity .3s, transform .35s;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 820px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .content {
+        padding: 28px 20px 24px;
+      }
+
+      .hero {
+        padding: 24px 20px 80px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <div class="panel">
+      <div class="hero">
+        <div class="back-btn" onclick="history.back()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          Volver
+        </div>
+        <div class="badge">🛡️ Ingreso por Convenio</div>
+        <h1>Subir Documentos</h1>
+        <p>Adjunta los documentos requeridos para completar tu matrícula</p>
+      </div>
+
+      <div class="content">
+        <div class="section-top">
+          <h2>Documentos Requeridos</h2>
+          <div class="progress-wrap">
+            <span class="progress-label">0 de 5 subidos</span>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+        <p class="subtitle">Sube todos los documentos para continuar con tu matrícula.</p>
+
+        <div id="cards-container">
+
+          <div class="doc-card" data-id="dni">
+            <div class="card-row">
+              <div class="doc-icon">🪪</div>
+              <div class="doc-body">
+                <h3>DNI <span class="status-chip required">Requerido</span></h3>
+                <p class="desc">Original y copia del Documento Nacional de Identidad</p>
+                <div class="btn-row">
+                  <label class="upload-btn-label">
+                    ☁️ Subir documento
+                    <input type="file" accept="image/*,.pdf" onchange="handleFile(this,'dni')">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-card" data-id="certificado">
+            <div class="card-row">
+              <div class="doc-icon">📄</div>
+              <div class="doc-body">
+                <h3>Certificado de Estudios <span class="status-chip required">Requerido</span></h3>
+                <p class="desc">Certificado de studies de secundaria completa</p>
+                <div class="btn-row">
+                  <label class="upload-btn-label">
+                    ☁️ Subir documento
+                    <input type="file" accept="image/*,.pdf" onchange="handleFile(this,'certificado')">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-card" data-id="partida">
+            <div class="card-row">
+              <div class="doc-icon">📄</div>
+              <div class="doc-body">
+                <h3>Partida de Nacimiento <span class="status-chip required">Requerido</span></h3>
+                <p class="desc">Partida o acta de nacimiento original</p>
+                <div class="btn-row">
+                  <label class="upload-btn-label">
+                    ☁️ Subir documento
+                    <input type="file" accept="image/*,.pdf" onchange="handleFile(this,'partida')">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-card" data-id="fotos">
+            <div class="card-row">
+              <div class="doc-icon">📸</div>
+              <div class="doc-body">
+                <h3>Fotos Carnet <span class="status-chip required">Requerido</span></h3>
+                <p class="desc">Fotos tamaño carnet (cantidad según requerimiento)</p>
+                <div class="btn-row">
+                  <label class="upload-btn-label">
+                    ☁️ Subir documento
+                    <input type="file" accept="image/*,.pdf" onchange="handleFile(this,'fotos')">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-card" data-id="academica">
+            <div class="card-row">
+              <div class="doc-icon">🎓</div>
+              <div class="doc-body">
+                <h3>Comprobante de Convenio <span class="status-chip required">Requerido</span></h3>
+                <p class="desc">Documento que acredita el convenio institucional</p>
+                <div class="btn-row">
+                  <label class="upload-btn-label">
+                    ☁️ Subir documento
+                    <input type="file" accept="image/*,.pdf" onchange="handleFile(this,'academica')">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="submitMatricula()" disabled>
+          ☁️ Enviar Matrícula
+        </button>
+        <p class="footer-note">🔒 Tus documentos se envían con cifrado seguro</p>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="checklist-card">
+        <h3>📋 Estado de documentos</h3>
+        <div class="check-item" id="check-dni">
+          <div class="check-dot">·</div>
+          DNI
+        </div>
+        <div class="check-item" id="check-certificado">
+          <div class="check-dot">·</div>
+          Certificado de Estudios
+        </div>
+        <div class="check-item" id="check-partida">
+          <div class="check-dot">·</div>
+          Partida de Nacimiento
+        </div>
+        <div class="check-item" id="check-fotos">
+          <div class="check-dot">·</div>
+          Fotos Carnet
+        </div>
+        <div class="check-item" id="check-academica">
+          <div class="check-dot">·</div>
+          Comprobante de convenio
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Inicializado todo en falso para obligar la carga interactiva
+    const uploaded = { dni: false, certificado: false, partida: false, fotos: false, academica: false };
+    const total = Object.keys(uploaded).length;
+
+    const docEmojis = { dni: '🪪', certificado: '📄', partida: '📄', fotos: '📸', academica: '🎓' };
+
+    function countUploaded() {
+      return Object.values(uploaded).filter(Boolean).length;
+    }
+
+    function updateProgress() {
+      const done = countUploaded();
+      document.querySelector('.progress-fill').style.width = (done / total * 100) + '%';
+      document.querySelector('.progress-label').textContent = done + ' de ' + total + ' subidos';
+      document.querySelector('.subtitle').textContent =
+        done === total
+          ? 'Todos los documentos han sido cargados correctamente.'
+          : 'Sube todos los documentos para continuar con tu matrícula.';
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = (done !== total);
+    }
+
+    function removeFile(id) {
+      uploaded[id] = false;
+
+      const card = document.querySelector(`[data-id="${id}"]`);
+      card.style.borderColor = 'var(--border)';
+      card.style.background = 'var(--white)';
+
+      const icon = card.querySelector('.doc-icon');
+      icon.style.background = '#edf9f1';
+      icon.style.color = 'var(--green)';
+      icon.textContent = docEmojis[id] || '📄';
+
+      const chip = card.querySelector('.status-chip');
+      chip.className = "status-chip required";
+      chip.textContent = 'Requerido';
+
+      const preview = card.querySelector('.file-preview');
+      if (preview) {
+        const btnRow = document.createElement('div');
+        btnRow.className = 'btn-row';
+        btnRow.innerHTML = `
+        <label class="upload-btn-label">
+          ☁️ Subir documento
+          <input type="file" accept="image/*,.pdf" onchange="handleFile(this,'${id}')">
+        </label>`;
+        preview.replaceWith(btnRow);
+      }
+
+      const checkItem = document.getElementById('check-' + id);
+      if (checkItem) {
+        checkItem.style.textDecoration = 'none';
+        checkItem.style.color = 'var(--text)';
+        const dot = checkItem.querySelector('.check-dot');
+        dot.style.background = 'var(--border)';
+        dot.style.color = 'var(--muted)';
+        dot.textContent = '·';
+      }
+
+      updateProgress();
+      showToast('🗑️ Documento eliminado');
+    }
+
+    function handleFile(input, id) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      uploaded[id] = true;
+
+      const card = document.querySelector(`[data-id="${id}"]`);
+      card.style.borderColor = '#6ee7a0';
+      card.style.background = '#fafffe';
+
+      const icon = card.querySelector('.doc-icon');
+      icon.style.background = 'var(--green)';
+      icon.style.color = '#fff';
+      icon.textContent = '✓';
+
+      const chip = card.querySelector('.status-chip');
+      chip.className = "status-chip ready";
+      chip.textContent = '✓ Listo';
+
+      const btnRow = card.querySelector('.btn-row');
+      if (btnRow) {
+        const preview = document.createElement('div');
+        preview.className = 'file-preview';
+        preview.innerHTML = `
+        <div class="file-preview-name">📄 ${file.name}</div>
+        <button class="remove-btn" onclick="removeFile('${id}')">✕</button>`;
+        btnRow.replaceWith(preview);
+      }
+
+      const checkItem = document.getElementById('check-' + id);
+      if (checkItem) {
+        checkItem.style.textDecoration = 'line-through';
+        checkItem.style.color = 'var(--muted)';
+        const dot = checkItem.querySelector('.check-dot');
+        dot.style.background = 'var(--green)';
+        dot.style.color = '#fff';
+        dot.textContent = '✓';
+      }
+
+      updateProgress();
+      showToast('✅ ' + file.name + ' subido correctamente');
+    }
+
+    function submitMatricula() {
+      if (countUploaded() !== total) {
+        showToast('⚠️ Debes subir todos los documentos requeridos.');
+        return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Enviando solicitud...';
+
+      showToast('🎉 Procesando matrícula...');
+
+      setTimeout(() => {
+        window.location.href = 'matricula-exitosa.html';
+      }, 1200);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+
+</html>

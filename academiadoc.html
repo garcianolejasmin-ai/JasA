@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subir Documentos — Convenio Academia</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --green: #00a63e;
+      --green-dark: #007a2e;
+      --green-light: #f0fdf4;
+      --green-border: #bbf7d0;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5ebe7;
+      --bg: #f2f5f3;
+      --white: #ffffff;
+      --radius: 24px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 32px 16px;
+      color: var(--text);
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, .05);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+      padding: 36px;
+      color: #fff;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, .2);
+      border: 1px solid rgba(255, 255, 255, .3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .content {
+      padding: 36px;
+    }
+
+    .section-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-top h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .tally-box {
+      font-weight: 700;
+      color: var(--green-dark);
+      background: #e8f9ee;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 14px;
+    }
+
+    .doc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .doc-card {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all .2s ease;
+      background: var(--white);
+    }
+
+    .doc-card.completed {
+      border-color: #6ee7a0;
+      background: #fafffe;
+    }
+
+    .card-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .doc-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #edf9f1;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .doc-card.completed .doc-icon {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .doc-body {
+      flex: 1;
+    }
+
+    .doc-body h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .file-area {
+      margin-top: 12px;
+    }
+
+    .file-preview {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--green-light);
+      border: 1px solid var(--green-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #166534;
+    }
+
+    .upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1.5px dashed #c6dece;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green-dark);
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .upload-label:hover {
+      background: var(--green-light);
+    }
+
+    .upload-label input {
+      display: none;
+    }
+
+    .action-btn {
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn {
+      background: #fee2e2;
+      color: #dc2626;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .remove-btn:hover {
+      background: #fca5a5;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      color: #fff;
+      padding: 18px;
+      border-radius: 14px;
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0, 120, 40, .2);
+      transition: all .2s;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 120, 40, .3);
+    }
+
+    .submit-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .sidebar {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .04);
+      height: max-content;
+    }
+
+    .sidebar h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .status-item.active {
+      text-decoration: line-through;
+      color: var(--text);
+    }
+
+    .status-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e5ebe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #fff;
+    }
+
+    .status-item.active .status-dot {
+      background: var(--green);
+    }
+
+    /* ESTILOS DEL TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #111827;
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+      opacity: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 820px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <div class="panel">
+      <div class="hero">
+        <div class="badge">🎓 Ingreso por Academia</div>
+        <h1>Subir Documentos</h1>
+      </div>
+
+      <div class="content">
+        <div class="section-top">
+          <h2>Documentación Requerida</h2>
+          <div class="tally-box" id="tally-count">0 / 5 Subidos</div>
+        </div>
+
+        <div class="doc-list" id="document-container"></div>
+
+        <button class="submit-btn" id="btn-submit" disabled onclick="processFormSubmit()">
+          Enviar Documentación Seguro
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h3>Progreso Checklist</h3>
+      <div id="checklist-container"></div>
+    </div>
+  </div>
+
+  <div id="toast-notification" class="toast"></div>
+
+  <script>
+    const state = {
+      documents: [
+        { id: 'dni', name: 'DNI', desc: 'Original y copia legible del Documento Nacional de Identidad.', file: null },
+        { id: 'certificado', name: 'Certificado de Estudios', desc: 'Certificado de estudios de secundaria completa.', file: null },
+        { id: 'partida', name: 'Partida de Nacimiento', desc: 'Partida o acta de nacimiento original.', file: null },
+        { id: 'fotos', name: 'Fotos Carnet', desc: 'Fotos tamaño carnet con fondo blanco riguroso.', file: null },
+        { id: 'comprobante', name: 'Comprobante de Pago', desc: 'Comprobante de pago de academia y matrícula.', file: null }
+      ]
+    };
+
+    function showNotification(message) {
+      const toast = document.getElementById('toast-notification');
+      toast.textContent = message;
+      toast.classList.add('show');
+
+      clearTimeout(window.toastTimeout);
+      window.toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function render() {
+      const container = document.getElementById('document-container');
+      const checklist = document.getElementById('checklist-container');
+      container.innerHTML = '';
+      checklist.innerHTML = '';
+
+      let uploadedCount = 0;
+
+      state.documents.forEach(doc => {
+        const isDone = !!doc.file;
+        if (isDone) uploadedCount++;
+
+        const card = document.createElement('div');
+        card.className = `doc-card ${isDone ? 'completed' : ''}`;
+        card.innerHTML = `
+          <div class="card-row">
+            <div class="doc-icon">${isDone ? '✓' : '📄'}</div>
+            <div class="doc-body">
+              <h3>${doc.name}</h3>
+              <p style="color: var(--muted); font-size: 13px;">${doc.desc}</p>
+              <div class="file-area">
+                ${isDone ? `
+                  <div class="file-preview">
+                    <span>📄 ${doc.file}</span>
+                    <button class="action-btn remove-btn" onclick="clearFile('${doc.id}')">Eliminar</button>
+                  </div>
+                ` : `
+                  <label class="upload-label">
+                    ☁️ Cargar Archivo
+                    <input type="file" accept="image/*,.pdf" onchange="uploadFile(this, '${doc.id}')">
+                  </label>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+
+        const checkItem = document.createElement('div');
+        checkItem.className = `status-item ${isDone ? 'active' : ''}`;
+        checkItem.innerHTML = `
+          <div class="status-dot">${isDone ? '✓' : '·'}</div>
+          <span>${doc.name}</span>
+        `;
+        checklist.appendChild(checkItem);
+      });
+
+      document.getElementById('tally-count').textContent = `${uploadedCount} de ${state.documents.length} Subidos`;
+      document.getElementById('btn-submit').disabled = (uploadedCount !== state.documents.length);
+    }
+
+    function clearFile(id) {
+      const doc = state.documents.find(d => d.id === id);
+      if (doc) {
+        const oldName = doc.name;
+        doc.file = null;
+        render();
+        showNotification(`🗑️ Archivo eliminado de: ${oldName}`);
+      }
+    }
+
+    function uploadFile(input, id) {
+      if (input.files && input.files[0]) {
+        const doc = state.documents.find(d => d.id === id);
+        if (doc) {
+          doc.file = input.files[0].name;
+          render();
+          showNotification(`✅ ¡${doc.name} se ha subido con éxito!`);
+        }
+      }
+    }
+
+    function processFormSubmit() {
+      const totalUploaded = state.documents.filter(d => d.file).length;
+      if (totalUploaded !== state.documents.length) {
+        showNotification("⚠️ Error: Faltan cargar documentos obligatorios.");
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.textContent = "Transmitiendo datos al servidor...";
+
+      setTimeout(() => {
+        window.location.href = 'matricula-exitosa.html';
+      }, 1000);
+    }
+
+    render();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>MATRÍCULA LCC – Panel Admin</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --g900: #0d3d1f;
+      --g800: #155a2e;
+      --g700: #1a7038;
+      --g600: #22913f;
+      --g500: #2db352;
+      --g400: #4cd176;
+      --g100: #e8f7ed;
+      --g50: #f2fbf5;
+
+      --amber: #d97706;
+      --amber-bg: #fef3c7;
+      --amber-border: #fcd34d;
+
+      --green-badge: #15803d;
+      --green-badge-bg: #dcfce7;
+      --green-badge-border: #86efac;
+
+      --white: #ffffff;
+      --gray-50: #f8fafb;
+      --gray-100: #f1f4f7;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 4px 24px rgba(0, 0, 0, .10);
+      --shadow-lg: 0 8px 40px rgba(0, 0, 0, .15);
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: #edf2f0;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--gray-700);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem 3rem;
+    }
+
+    /* ── PHONE FRAME ── */
+    .frame {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* ══════════════════════════════
+       HEADER (green panel)
+    ══════════════════════════════ */
+    .header {
+      background: linear-gradient(155deg, var(--g900) 0%, var(--g700) 60%, var(--g600) 100%);
+      padding: 1.4rem 1.4rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .05);
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: -20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-identity {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+    }
+
+    .header-logo {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, .15);
+      border-radius: 14px;
+      border: 1.5px solid rgba(255, 255, 255, .2);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .header-logo svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .header-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.01em;
+    }
+
+    .header-sub {
+      font-size: .72rem;
+      color: rgba(255, 255, 255, .65);
+      font-weight: 400;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-top: .1rem;
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .2);
+      color: rgba(255, 255, 255, .8);
+      border-radius: 9px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, .22);
+    }
+
+    .btn-logout svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* stats row adjusted for 3 items */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .7rem;
+      margin-top: 1.3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .14);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-sm);
+      padding: .75rem .5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+
+    .stat-card:hover {
+      background: rgba(255, 255, 255, .18);
+      transform: translateY(-2px);
+    }
+
+    .stat-icon {
+      display: flex;
+    }
+
+    .stat-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .stat-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: .67rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+    }
+
+    .stat-total .stat-icon svg,
+    .stat-total .stat-num,
+    .stat-total .stat-label {
+      color: rgba(255, 255, 255, .9);
+    }
+
+    .stat-pend .stat-icon svg,
+    .stat-pend .stat-num {
+      color: var(--amber);
+    }
+
+    .stat-pend .stat-label {
+      color: var(--amber);
+    }
+
+    .stat-apro .stat-icon svg,
+    .stat-apro .stat-num {
+      color: var(--g400);
+    }
+
+    .stat-apro .stat-label {
+      color: var(--g400);
+    }
+
+    /* ══════════════════════════════
+       LIST AREA
+    ══════════════════════════════ */
+    .list-area {
+      background: var(--gray-50);
+      flex: 1;
+      padding: 1.1rem 1.1rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: .1rem;
+    }
+
+    /* Input de búsqueda interactivo */
+    .search-container {
+      position: relative;
+      margin-bottom: 0.2rem;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 1rem 0 2.3rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gray-700);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--g500);
+      box-shadow: 0 0 0 3px rgba(45, 179, 82, .12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .search-icon svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* student row card */
+    .student-row {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-200);
+      padding: .85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .15s, border-color .2s;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+    }
+
+    .student-row:hover {
+      box-shadow: 0 4px 16px rgba(34, 145, 63, .12);
+      border-color: var(--g400);
+      transform: translateY(-1px);
+    }
+
+    .student-row.active {
+      border-color: var(--g500);
+      box-shadow: 0 0 0 2px rgba(45, 179, 82, .2);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--g100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--g700);
+    }
+
+    .student-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .student-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--gray-800);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-meta {
+      font-size: .75rem;
+      color: var(--gray-400);
+      margin-top: .1rem;
+    }
+
+    .badge {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      padding: .25rem .6rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .badge-pend {
+      background: var(--amber-bg);
+      color: var(--amber);
+      border: 1px solid var(--amber-border);
+    }
+
+    .badge-apro {
+      background: var(--green-badge-bg);
+      color: var(--green-badge);
+      border: 1px solid var(--green-badge-border);
+    }
+
+    /* ══════════════════════════════
+       MODAL OVERLAY
+    ══════════════════════════════ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(15, 30, 20, .45);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 440px;
+      padding: 0 0 2rem;
+      box-shadow: 0 -8px 40px rgba(0, 0, 0, .2);
+      transform: translateY(40px);
+      transition: transform .3s cubic-bezier(.22, .68, 0, 1.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    /* modal header */
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 1.4rem .8rem;
+      border-bottom: 1px solid var(--gray-100);
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      z-index: 2;
+    }
+
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .btn-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-500);
+      transition: background .2s, color .2s;
+    }
+
+    .btn-close:hover {
+      background: var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    .btn-close svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* detail rows */
+    .detail-body {
+      padding: .6rem 1.4rem;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .78rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      font-size: .84rem;
+      color: var(--gray-400);
+      font-weight: 400;
+    }
+
+    .detail-value {
+      font-size: .9rem;
+      color: var(--gray-800);
+      font-weight: 600;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-align: right;
+    }
+
+    /* change status section adjusted for 2 items */
+    .change-status {
+      padding: 1rem 1.4rem 0;
+    }
+
+    .change-label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-bottom: .7rem;
+    }
+
+    .status-btns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .55rem;
+    }
+
+    .btn-status {
+      border-radius: var(--radius-sm);
+      height: 42px;
+      border: 1.5px solid;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .35rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      transition: transform .15s, box-shadow .15s, background .2s;
+      background: var(--white);
+    }
+
+    .btn-status:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .1);
+    }
+
+    .btn-status:active {
+      transform: none;
+    }
+
+    .btn-status svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .btn-pend {
+      border-color: var(--amber-border);
+      color: var(--amber);
+    }
+
+    .btn-pend:hover {
+      background: var(--amber-bg);
+    }
+
+    .btn-pend.selected {
+      background: var(--amber-bg);
+      box-shadow: 0 0 0 2px var(--amber);
+    }
+
+    .btn-apro {
+      border-color: var(--green-badge-border);
+      color: var(--green-badge);
+    }
+
+    .btn-apro:hover {
+      background: var(--green-badge-bg);
+    }
+
+    .btn-apro.selected {
+      background: var(--green-badge-bg);
+      box-shadow: 0 0 0 2px var(--green-badge);
+    }
+
+    /* delete button */
+    .btn-delete {
+      margin: 1.1rem 1.4rem 0;
+      display: flex;
+      width: calc(100% - 2.8rem);
+      height: 50px;
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, .3);
+      transition: transform .15s, box-shadow .15s, filter .15s;
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, .4);
+      filter: brightness(1.05);
+    }
+
+    .btn-delete:active {
+      transform: none;
+    }
+
+    .btn-delete svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--gray-800);
+      color: var(--white);
+      padding: .65rem 1.2rem;
+      border-radius: 999px;
+      font-size: .83rem;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      z-index: 200;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="frame">
+
+    <div class="header">
+      <div class="header-top">
+        <div class="header-identity">
+          <div class="header-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+              <rect x="9" y="3" width="6" height="4" rx="1" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+          </div>
+          <div>
+            <div class="header-title">Panel Admin</div>
+            <div class="header-sub">Matrícula LCC 2026</div>
+          </div>
+        </div>
+        <button class="btn-logout" title="Cerrar sesión" onclick="window.location.href='panelAdmin.html'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card stat-total">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <div class="stat-num" id="cnt-total">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-card stat-pend">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div class="stat-num" id="cnt-pend">0</div>
+          <div class="stat-label">Pendiente</div>
+        </div>
+        <div class="stat-card stat-apro">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <div class="stat-num" id="cnt-apro">0</div>
+          <div class="stat-label">Aprobado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="list-area">
+      <p class="section-title">Registros de Matrícula</p>
+
+      <div class="search-container">
+        <input type="text" id="search-dni" class="search-input" placeholder="Buscar alumno por DNI..."
+          autocomplete="off" />
+        <span class="search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+      </div>
+
+      <div id="student-list"></div>
+    </div>
+
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closeModal(event)">
+    <div class="modal" id="modal">
+
+      <div class="modal-header">
+        <span class="modal-title">Detalle de Matrícula</span>
+        <button class="btn-close" onclick="closeModalDirect()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-row"><span class="detail-label">DNI:</span> <span class="detail-value" id="d-dni">—</span>
+        </div>
+        <div class="detail-row"><span class="detail-label">Apellidos:</span> <span class="detail-value"
+            id="d-apellidos">—</span></div>
+        <div class="detail-row"><span class="detail-label">Nombres:</span> <span class="detail-value"
+            id="d-nombres">—</span></div>
+        <div class="detail-row"><span class="detail-label">Tipo Ingreso:</span> <span class="detail-value"
+            id="d-tipo">—</span></div>
+        <div class="detail-row"><span class="detail-label">Fecha:</span> <span class="detail-value"
+            id="d-fecha">—</span></div>
+        <div class="detail-row"><span class="detail-label">Estado:</span> <span class="detail-value"
+            id="d-estado">—</span></div>
+      </div>
+
+      <div class="change-status">
+        <p class="change-label">Cambiar Estado:</p>
+        <div class="status-btns">
+          <button class="btn-status btn-pend" onclick="changeStatus('Pendiente')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Pendiente
+          </button>
+          <button class="btn-status btn-apro" onclick="changeStatus('Aprobado')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            Aprobar
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-delete" onclick="deleteRecord()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+        </svg>
+        Eliminar Registro
+      </button>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ── DATA (Adaptada y sanitizada de estados obsoletos) ── */
+    let students = [
+      { id: 1, dni: '87654321', apellidos: 'Antón Panta', nombres: 'Justin Santiago', tipo: 'Examen', fecha: '2026-01-16', estado: 'Pendiente' },
+      { id: 2, dni: '12398765', apellidos: 'García López', nombres: 'Carlos André', tipo: 'Traslado', fecha: '2026-01-18', estado: 'Aprobado' },
+      { id: 3, dni: '45671234', apellidos: 'Torres Vega', nombres: 'Lucía Paola', tipo: 'Ordinario', fecha: '2026-01-20', estado: 'Pendiente' },
+      { id: 4, dni: '65432198', apellidos: 'Flores Quispe', nombres: 'José Manuel', tipo: 'Examen', fecha: '2026-01-22', estado: 'Pendiente' },
+      { id: 5, dni: '32165498', apellidos: 'García Martínez', nombres: 'Alex Jhon', tipo: 'Examen', fecha: '2026-02-15', estado: 'Pendiente' },
+    ];
+
+    let activeId = null;
+
+    function initials(nombres, apellidos) {
+      return (nombres[0] + apellidos[0]).toUpperCase();
+    }
+
+    function badgeClass(estado) {
+      return estado === 'Pendiente' ? 'badge-pend' : 'badge-apro';
+    }
+
+    function updateCounters() {
+      document.getElementById('cnt-total').textContent = students.length;
+      document.getElementById('cnt-pend').textContent = students.filter(s => s.estado === 'Pendiente').length;
+      document.getElementById('cnt-apro').textContent = students.filter(s => s.estado === 'Aprobado').length;
+    }
+
+    function renderList() {
+      const list = document.getElementById('student-list');
+      list.innerHTML = '';
+
+      // Obtener el patrón de búsqueda del DNI
+      const query = document.getElementById('search-dni').value.trim();
+      const filtered = students.filter(s => s.dni.includes(query));
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div style="text-align: center; color: var(--gray-400); font-size: 0.82rem; padding: 2rem 0;">No se encontraron alumnos con el DNI ingresado</div>`;
+        return;
+      }
+
+      filtered.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'student-row' + (s.id === activeId ? ' active' : '');
+        row.dataset.id = s.id;
+        row.innerHTML = `
+        <div class="avatar">${initials(s.nombres, s.apellidos)}</div>
+        <div class="student-info">
+          <div class="student-name">${s.apellidos}, ${s.nombres}</div>
+          <div class="student-meta">DNI ${s.dni} · ${s.tipo} · ${s.fecha}</div>
+        </div>
+        <span class="badge ${badgeClass(s.estado)}">${s.estado}</span>
+      `;
+        row.addEventListener('click', () => openModal(s.id));
+        list.appendChild(row);
+      });
+    }
+
+    function openModal(id) {
+      activeId = id;
+      const s = students.find(x => x.id === id);
+      if (!s) return;
+
+      document.getElementById('d-dni').textContent = s.dni;
+      document.getElementById('d-apellidos').textContent = s.apellidos;
+      document.getElementById('d-nombres').textContent = s.nombres;
+      document.getElementById('d-tipo').textContent = s.tipo;
+      document.getElementById('d-fecha').textContent = s.fecha;
+
+      const estadoEl = document.getElementById('d-estado');
+      estadoEl.innerHTML = `<span class="badge ${badgeClass(s.estado)}">${s.estado}</span>`;
+
+      // highlight active status btn
+      document.querySelectorAll('.btn-status').forEach(b => b.classList.remove('selected'));
+      const map = { 'Pendiente': '.btn-pend', 'Aprobado': '.btn-apro' };
+      document.querySelector(map[s.estado])?.classList.add('selected');
+
+      renderList();
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function closeModalDirect() {
+      document.getElementById('overlay').classList.remove('open');
+      activeId = null;
+      renderList();
+    }
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('overlay')) closeModalDirect();
+    }
+
+    function changeStatus(newStatus) {
+      if (activeId === null) return;
+      const s = students.find(x => x.id === activeId);
+      if (!s) return;
+      s.estado = newStatus;
+
+      // update modal display
+      const estadoEl = document.getElementById('d-estado');
+      estadoEl.innerHTML = `<span class="badge ${badgeClass(s.estado)}">${s.estado}</span>`;
+      document.querySelectorAll('.btn-status').forEach(b => b.classList.remove('selected'));
+      const map = { 'Pendiente': '.btn-pend', 'Aprobado': '.btn-apro' };
+      document.querySelector(map[newStatus])?.classList.add('selected');
+
+      updateCounters();
+      renderList();
+      showToast(`Estado actualizado: ${newStatus}`);
+    }
+
+    function deleteRecord() {
+      if (activeId === null) return;
+      if (!confirm('¿Seguro que deseas eliminar este registro?')) return;
+      students = students.filter(x => x.id !== activeId);
+      closeModalDirect();
+      updateCounters();
+      renderList();
+      showToast('Registro eliminado');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    /* Asignación del evento de filtrado en tiempo real */
+    document.getElementById('search-dni').addEventListener('input', renderList);
+
+    /* init */
+    updateCounters();
+    renderList();
+  </script>
+</body>
+
+</html>
